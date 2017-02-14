@@ -37,7 +37,7 @@ namespace ArtApplication
             // Add framework services.
 
             services.AddMvc();
-
+            services.AddCors();
             // Add application services.
 
         }
@@ -60,7 +60,8 @@ namespace ArtApplication
             app.UseStaticFiles();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-
+           
+            app.UseCors(builder=> builder.AllowAnyOrigin());
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
