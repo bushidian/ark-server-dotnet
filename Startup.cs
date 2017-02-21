@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using ArkApplication.Framework.Caching;
+using ArkApplication.Framework.NoSql;
+using ArkApplication.Framework.Data;
+using System;
 
 namespace ArkApplication
 {
@@ -13,7 +18,9 @@ namespace ArkApplication
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("config.json",optional: true, reloadOnChange:true)
+                .AddEnvironmentVariables();
                 
             if (env.IsDevelopment())
             {
@@ -35,6 +42,16 @@ namespace ArkApplication
             services.AddMvc();
             services.AddCors();
             // Add application services.
+
+            services.AddSingleton(provider => Configuration);
+
+            var cacheType = CacheTypes.None;
+            Enum.TryParse(Configuration["Cache:Type"], out cacheType);
+            InitCacheProvider(services, cacheType);
+
+            var nosqlType = NoSqlTypes.None;
+            Enum.TryParse(Configuration["NoSql:Type"], out nosqlType);
+            InitNoSqlProvider(services, nosqlType);
 
         }
 
@@ -65,5 +82,54 @@ namespace ArkApplication
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
+        private void InitDbConnection(IServiceCollection services, DbTypes type)
+        {
+              switch(type){
+                  case DbTypes.SqlServer:
+                      services.AddDbContext<ArkDbContext>(options =>
+                          options.UseSqlServer(Configuration["Data:SqlServerConnection"]));
+                  break;
+                  case DbTypes.MySql:
+                     services.AddDbContext<ArkDbContext>(options =>
+                         options.UseMySql(Configuration["Data:MySqlConnection"]));
+                  break;
+                  case DbTypes.PostgreSql:
+                     services.AddDbContext<ArkDbContext>(options =>
+                         options.UseNpgsql(Configuration["Data:PostgreSqlConnection"]));
+                  break;
+                  case DbTypes.SqlLite:
+                      services.AddDbContext<ArkDbContext>(options =>
+                         options.UseSqlite(Configuration["Data:SqlLiteConnection"]));
+                  break;
+              }
+        }
+
+        private void InitCacheProvider(IServiceCollection services, CacheTypes type)
+        {
+            switch(type)
+            {
+                case CacheTypes.Memory:
+                   services.AddSingleton<ICacheManager, MemoryCacheManager>();
+                   break;
+                case CacheTypes.Redis:
+                   services.AddSingleton<ICacheManager, RedisCacheManager>();
+                   break;
+                case CacheTypes.None:
+                   services.AddSingleton<ICacheManager, NullCacheManager>();
+                   break;
+            }
+        }
+
+        private void InitNoSqlProvider(IServiceCollection services, NoSqlTypes type)
+        {
+            switch(type)
+            {
+                case NoSqlTypes.Mongo:
+                   services.AddScoped(typeof(INoSqlRepository<>), typeof(MongoRepository<>));
+                   break;
+            }
+        }
+
     }
 }

@@ -1,0 +1,18 @@
+{
+    "Data": {
+        "SqlServerConnection": "server=192.168.1.8;uid=store;pwd=BFE.dev.2011;database=CorpSite",
+        "MySqlConnection": "Server=192.168.1.116;Database=CorpSite; User Id=root;Password=123;",
+        "PostgreSqlConnection": "Server=192.168.1.116;Database=CorpSite; User Id=postgres;Password=123;",
+        "SqlLiteConnection": "Filename=CorpSite.db;",
+        "Type": "SqlServer"
+    },
+    "Nosql": {
+        "Db": "CropSite",
+        "Mongo": "mongodb://192.168.1.116:27017",
+        "Type": "Mongo"
+    },
+    "Cache": {
+        "Redis": "192.168.1.116:6379",
+        "Type": "Memory"
+    }
+}

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ArkApplication.Framework.Caching;
 
 namespace ArkApplication.Controllers
 {
@@ -7,6 +8,24 @@ namespace ArkApplication.Controllers
     public class CustomersController : Controller
     {
         
+ 
+        #region Constr
+ 
+        #region Filed
+
+        private readonly ICacheManager cacheManger;
+
+        #endregion
+
+        public CustomersController(ICacheManager cache){
+            
+            cacheManger = cache;
+        }
+
+        #endregion 
+        
+        #region Method
+
         [Route("")]
         [HttpGet]
         public string Index()
@@ -48,6 +67,8 @@ namespace ArkApplication.Controllers
         {
             return string.Format("{0}", id);
         }
+
+        #endregion
 
     }
 
