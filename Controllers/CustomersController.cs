@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
 
-
-namespace ArtApplication.Controllers
+namespace ArkApplication.Controllers
 {
     
     [Route("api/[controller]")]

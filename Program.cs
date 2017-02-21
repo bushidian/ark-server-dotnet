@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 using Microsoft.Extensions.Configuration;
 
-namespace ArtApplication
+namespace ArkApplication
 {
     public class Program
     {
