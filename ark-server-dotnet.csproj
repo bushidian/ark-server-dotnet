@@ -48,6 +48,9 @@
     <PackageReference Include="MongoDB.Driver">
       <Version>2.4.2</Version>
     </PackageReference>
+    <PackageReference Include="ServiceStack.Redis.Core">
+      <Version>1.0.21</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
