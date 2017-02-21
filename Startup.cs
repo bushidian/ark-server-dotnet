@@ -45,6 +45,13 @@ namespace ArkApplication
 
             services.AddSingleton(provider => Configuration);
 
+            var dbType = DbTypes.SqlServer;
+            if(Enum.TryParse(Configuration["Data:Type"], out dbType)){
+                InitDbConnection(services, dbType);
+            }
+            
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
             var cacheType = CacheTypes.None;
             Enum.TryParse(Configuration["Cache:Type"], out cacheType);
             InitCacheProvider(services, cacheType);
