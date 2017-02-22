@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ArkApplication.Framework.Caching;
+using ArkApplication.Framework.NoSql;
+using ArkApplication.Models;
 
 namespace ArkApplication.Controllers
 {
@@ -14,12 +16,15 @@ namespace ArkApplication.Controllers
         #region Filed
 
         private readonly ICacheManager cacheManger;
+        private readonly INoSqlRepository<States> statesRepository;
 
         #endregion
 
-        public CustomersController(ICacheManager cache){
+        public CustomersController(ICacheManager cache, INoSqlRepository<States> states){
             
             cacheManger = cache;
+            statesRepository = states;
+            
         }
 
         #endregion 

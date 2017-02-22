@@ -19,7 +19,7 @@ namespace ArkApplication.Models
 
         public int StateId { get; set;}
 
-        public State State { get; set; }
+        public States States { get; set; }
 
         public int Zip { get; set; }
 

@@ -7,7 +7,7 @@
         "Type": "SqlServer"
     },
     "Nosql": {
-        "Db": "CropSite",
+        "Db": "customermanager",
         "Mongo": "mongodb://192.168.1.116:27017",
         "Type": "Mongo"
     },

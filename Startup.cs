@@ -13,14 +13,22 @@ namespace ArkApplication
 {
     public class Startup
     {
+
+        #region Filed
+
+        public IConfiguration Configuration { get; }
+
+        #endregion
+
+        #region Constr
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("config.json",optional: true, reloadOnChange:true)
-                .AddEnvironmentVariables();
+                .AddJsonFile("config.json",optional: true, reloadOnChange:true);
                 
             if (env.IsDevelopment())
             {
@@ -32,7 +40,7 @@ namespace ArkApplication
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
+        #endregion
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -49,8 +57,6 @@ namespace ArkApplication
             if(Enum.TryParse(Configuration["Data:Type"], out dbType)){
                 InitDbConnection(services, dbType);
             }
-            
-            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             var cacheType = CacheTypes.None;
             Enum.TryParse(Configuration["Cache:Type"], out cacheType);
@@ -80,8 +86,11 @@ namespace ArkApplication
             app.UseStaticFiles();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-           
+
+            app.UseStatusCodePages();
+
             app.UseCors(builder=> builder.AllowAnyOrigin());
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -92,6 +101,9 @@ namespace ArkApplication
 
         private void InitDbConnection(IServiceCollection services, DbTypes type)
         {
+              
+              services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
               switch(type){
                   case DbTypes.SqlServer:
                       services.AddDbContext<ArkDbContext>(options =>
