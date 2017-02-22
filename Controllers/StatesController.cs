@@ -12,13 +12,13 @@ namespace ArkApplication.Controllers
  
             #region Filed
 
-            private readonly INoSqlRepository<States> stateRepository;
+            private readonly INoSqlRepository<states> stateRepository;
 
             #endregion
             
             #region Constr
 
-            public StatesController(INoSqlRepository<States> states)
+            public StatesController(INoSqlRepository<states> states)
             {
                 stateRepository = states;
             }
@@ -29,7 +29,7 @@ namespace ArkApplication.Controllers
        
             [Route("")]
             [HttpGet]
-            public IEnumerable<States> Index()
+            public IEnumerable<states> Index()
             {
                 return stateRepository.Collection();
             }

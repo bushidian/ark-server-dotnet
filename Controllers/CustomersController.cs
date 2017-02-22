@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using ArkApplication.Framework.Caching;
 using ArkApplication.Framework.NoSql;
 using ArkApplication.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ArkApplication.Controllers
 {
@@ -9,22 +11,24 @@ namespace ArkApplication.Controllers
     [Route("api/[controller]")]
     public class CustomersController : Controller
     {
-        
- 
+
         #region Constr
  
         #region Filed
 
         private readonly ICacheManager cacheManger;
-        private readonly INoSqlRepository<States> statesRepository;
+        private readonly INoSqlRepository<states> statesRepository;
+
+        private readonly INoSqlRepository<customers> customersRepository;
 
         #endregion
 
-        public CustomersController(ICacheManager cache, INoSqlRepository<States> states){
+        public CustomersController(ICacheManager cache, INoSqlRepository<states> states, 
+             INoSqlRepository<customers> customers){
             
             cacheManger = cache;
             statesRepository = states;
-            
+            customersRepository = customers;
         }
 
         #endregion 
@@ -33,55 +37,49 @@ namespace ArkApplication.Controllers
 
         [Route("")]
         [HttpGet]
-        public string Index()
+        public IEnumerable<customers> Index()
         {
-            return "Hello";
+            return customersRepository.AsQueryable().ToList();
         }
 
         [Route("page/{top}/{skip}")]
         [HttpGet]
-        public string GetCustomersPage(int top = 10, int skip=0)
+        public IEnumerable<customers> GetCustomersPage(int top = 10, int skip=0)
         {
-            return string.Format("{0}/{1}", top,skip);
+            return customersRepository.AsQueryable().Take(top).Skip(skip);
         }
 
         [Route("{id}")]
         [HttpGet]
-        public string GetCustomer(string id)
+        public customers GetCustomer(string id)
         {
-            return string.Format("{0}", id);
+            return customersRepository.GetById(id);
         }
 
         [Route("")]
         [HttpPost]
-        public CustomerEntity InsertCustomer([FromBody] CustomerEntity entity)
+        public customers InsertCustomer([FromBody] customers entity)
         {
-            return entity;
+            return customersRepository.Add(entity);
         }
         
         [Route("{id}")]
         [HttpPut]
-        public string UpdateCustomer(string id)
+        public customers UpdateCustomer(string id, customers entity)
         {
-            return string.Format("{0}", id);
+
+            return customersRepository.Update(entity);
         }
 
         [Route("{id}")]
         [HttpDelete]
-        public string DeleteCustomer(string id)
+        public void DeleteCustomer(string id)
         {
-            return string.Format("{0}", id);
+            customersRepository.Delete(id);
         }
 
         #endregion
 
-    }
-
-    public class CustomerEntity 
-    {
-         public string FirstName { get; set;}
-
-         public string LastName { get; set; }
     }
 
 
