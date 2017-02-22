@@ -42,11 +42,13 @@ namespace ArkApplication.Controllers
             return customersRepository.AsQueryable().ToList();
         }
 
-        [Route("page/{top}/{skip}")]
+        [Route("page/{skip}/{top}")]
         [HttpGet]
-        public IEnumerable<customers> GetCustomersPage(int top = 10, int skip=0)
+        public IEnumerable<customers> GetCustomersPage(int skip=0, int top = 10)
         {
-            return customersRepository.AsQueryable().Take(top).Skip(skip);
+            var query = customersRepository.AsQueryable();
+            Response.Headers["X-InlineCount"] = query.Count().ToString();
+            return query.Take(top).Skip(skip);
         }
 
         [Route("{id}")]

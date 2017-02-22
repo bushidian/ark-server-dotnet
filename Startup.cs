@@ -89,7 +89,7 @@ namespace ArkApplication
 
             app.UseStatusCodePages();
 
-            app.UseCors(builder=> builder.AllowAnyOrigin());
+            app.UseCors(builder=> builder.AllowAnyOrigin().WithExposedHeaders("X-InlineCount").AllowAnyMethod());
 
             app.UseMvc(routes =>
             {

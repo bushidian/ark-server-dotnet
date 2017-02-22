@@ -7,7 +7,7 @@ namespace ArkApplication.Models
     public class customers : Entity 
     {
 
-        public string fristName { get; set; }
+        public string firstName { get; set; }
 
         public string lastName { get; set; }
 
@@ -19,7 +19,7 @@ namespace ArkApplication.Models
 
         public int stateId { get; set;}
 
-        public states states { get; set; }
+        public states state { get; set; }
 
         public int zip { get; set; }
 
