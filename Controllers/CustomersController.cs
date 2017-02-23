@@ -48,7 +48,7 @@ namespace ArkApplication.Controllers
         {
             var query = customersRepository.AsQueryable();
             Response.Headers["X-InlineCount"] = query.Count().ToString();
-            return query.Take(top).Skip(skip);
+            return query.Skip(skip).Take(top);
         }
 
         [Route("{id}")]
