@@ -2,8 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using ArkApplication.Framework.Caching;
 using ArkApplication.Framework.NoSql;
 using ArkApplication.Models;
+using ArkApplication.Framework.Common.Operations;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+
 
 namespace ArkApplication.Controllers
 {
@@ -60,17 +63,27 @@ namespace ArkApplication.Controllers
 
         [Route("")]
         [HttpPost]
-        public customers InsertCustomer([FromBody] customers entity)
+        public OperationResult<customers> InsertCustomer([FromBody] customers entity)
         {
-            return customersRepository.Add(entity);
+            try{
+                 var data = customersRepository.Add(entity);
+                 return new OperationResult<customers>(true, data);
+            }catch(Exception ex){
+                 return new OperationResult<customers>(false, null, ex.Message);
+            }
+           
         }
         
         [Route("{id}")]
         [HttpPut]
-        public customers UpdateCustomer(string id, customers entity)
+        public OperationResult<customers> UpdateCustomer(string id, [FromBody] customers entity)
         {
-
-            return customersRepository.Update(entity);
+            try{
+                var data = customersRepository.Update(entity);
+                return new OperationResult<customers>(true, data);
+            }catch(Exception ex){
+                return new OperationResult<customers>(false, null , ex.Message);
+            }
         }
 
         [Route("{id}")]

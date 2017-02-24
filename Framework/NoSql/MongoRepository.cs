@@ -42,7 +42,7 @@ namespace ArkApplication.Framework.NoSql
          public T GetById(TKey id)
          {
 
-             var query = Builders<T>.Filter.Eq(e => e.Id, id);
+             var query = Builders<T>.Filter.Eq(e => e._id, id);
              var temp = _database.GetCollection<T>(typeof(T).Name).Find(query).ToListAsync();
              return temp.Result.FirstOrDefault();
          }
@@ -60,7 +60,7 @@ namespace ArkApplication.Framework.NoSql
 
          public T Update(T entity)
          {
-             var query = Builders<T>.Filter.Eq(e => e.Id, entity.Id);
+             var query = Builders<T>.Filter.Eq(e => e._id, entity._id);
              _database.GetCollection<T>(typeof(T).Name).ReplaceOneAsync(query, entity);
              return entity;
          }
@@ -75,20 +75,20 @@ namespace ArkApplication.Framework.NoSql
 
          public void Delete(TKey id)
          {
-             var query = Builders<T>.Filter.Eq(e => e.Id, id);
+             var query = Builders<T>.Filter.Eq(e => e._id, id);
              _database.GetCollection<T>(typeof(T).Name).DeleteOneAsync(query);
          }
 
          public void Delete(T entity)
          {
-             this.Delete(entity.Id);
+             this.Delete(entity._id);
          }
 
          public void Delete(Expression<Func<T, bool>> predicate)
          {
              foreach (T entity in this.Collection().AsQueryable<T>().Where(predicate))
              {
-                this.Delete(entity.Id);
+                this.Delete(entity._id);
              }
          }
 

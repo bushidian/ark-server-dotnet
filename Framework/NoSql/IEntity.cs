@@ -14,7 +14,7 @@ namespace ArkApplication.Framework.NoSql
         /// </summary>
         /// <value>Id of the Entity.</value>
         [BsonId]
-        TKey Id { get; set; }
+        TKey _id { get; set; }
     }
 
     /// <summary>

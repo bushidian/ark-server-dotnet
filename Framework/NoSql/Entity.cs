@@ -15,7 +15,7 @@ namespace ArkApplication.Framework.NoSql
         /// </summary>
         /// <value>The id for this object (the primary record for an entity).</value>
         [BsonRepresentation(BsonType.ObjectId)]
-        public virtual string Id { get; set; }
+        public virtual string _id { get; set; }
     }
 
 }

@@ -89,7 +89,7 @@ namespace ArkApplication
 
             app.UseStatusCodePages();
 
-            app.UseCors(builder=> builder.AllowAnyOrigin().WithExposedHeaders("X-InlineCount").AllowAnyMethod());
+            InitCors(app);
 
             app.UseMvc(routes =>
             {
@@ -98,6 +98,8 @@ namespace ArkApplication
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
+        #region Data Cache Nosql Provider
 
         private void InitDbConnection(IServiceCollection services, DbTypes type)
         {
@@ -148,6 +150,16 @@ namespace ArkApplication
                    services.AddScoped(typeof(INoSqlRepository<>), typeof(MongoRepository<>));
                    break;
             }
+        }
+
+        #endregion
+
+        private void InitCors(IApplicationBuilder app)
+        {
+             app.UseCors(builder=> builder.AllowAnyOrigin()
+                               .WithExposedHeaders("X-InlineCount")
+                               .AllowAnyMethod()
+                               .AllowAnyHeader());
         }
 
     }
