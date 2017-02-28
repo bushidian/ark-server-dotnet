@@ -65,10 +65,16 @@ namespace ArkApplication.Controllers
         [HttpPost]
         public OperationResult<customers> InsertCustomer([FromBody] customers entity)
         {
-            try{
+            try
+            {
+                 var state = statesRepository.FirstOrDefault(o=>o.stateId == entity.stateId);
+                 if(state == null) throw new OperationException("State not found");
+                 entity.state = state;
                  var data = customersRepository.Add(entity);
                  return new OperationResult<customers>(true, data);
-            }catch(Exception ex){
+            }
+            catch(Exception ex)
+            {
                  return new OperationResult<customers>(false, null, ex.Message);
             }
            
@@ -78,19 +84,26 @@ namespace ArkApplication.Controllers
         [HttpPut]
         public OperationResult<customers> UpdateCustomer(string id, [FromBody] customers entity)
         {
-            try{
+            try
+            {
+                var state = statesRepository.FirstOrDefault(o=>o.stateId == entity.stateId);
+                if(state == null) throw new OperationException("State not found");
+                entity.state = state;
                 var data = customersRepository.Update(entity);
                 return new OperationResult<customers>(true, data);
-            }catch(Exception ex){
+            }
+            catch(Exception ex)
+            {
                 return new OperationResult<customers>(false, null , ex.Message);
             }
         }
 
         [Route("{id}")]
         [HttpDelete]
-        public void DeleteCustomer(string id)
+        public OperationResult DeleteCustomer(string id)
         {
             customersRepository.Delete(id);
+            return new OperationResult();
         }
 
         #endregion
