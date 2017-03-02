@@ -1,11 +1,17 @@
 using ArkApplication.Framework.NoSql;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ArkApplication.Models
 {
 
     public class customers : Entity 
     {
+        
+        public customers()
+        {
+             orders =  Enumerable.Empty<order>();
+        }
 
         public string firstName { get; set; }
 

@@ -41,4 +41,41 @@ namespace ArkApplication.Framework.Common.Operations
         #endregion
     }
 
+    public class OperationResult
+    {
+
+        #region
+
+        public OperationResult()
+            : this(true)
+        {
+        }
+
+        public OperationResult(bool s)
+        {
+            status = s;
+        }
+
+        public OperationResult(string err)
+            : this(false, err)
+        {
+        }
+
+        public OperationResult(bool s, string err)
+        {
+            status = s;
+            error = err;
+        }
+
+        #endregion
+
+        #region Filed
+
+        public bool status { get; set; }
+        
+        public string error { get; set; }
+        
+        #endregion
+    }
+
 }
