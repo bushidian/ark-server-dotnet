@@ -11,4 +11,4 @@ RUN dotnet publish -c Release -o out
 
 EXPOSE 5004
 
-ENTRYPOINT ["dotnet", "out/dotnetapp.dll"]
+ENTRYPOINT ["dotnet", "out/ark-server-dotnet.dll"]
