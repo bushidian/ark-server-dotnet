@@ -1,12 +1,14 @@
-FROM microsoft/aspnet
+FROM microsoft/dotnet
 
 MAINTAINER Bushidian
 
 COPY . /app
 WORKDIR /app
 
-RUN ['dotnet', 'restore']
+RUN dotnet restore 
+
+RUN dotnet publish -c Release -o out
 
 EXPOSE 5004
 
-ENTRYPOINT ["dotnet", "run"]
+ENTRYPOINT ["dotnet", "out/dotnetapp.dll"]
