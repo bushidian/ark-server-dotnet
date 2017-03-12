@@ -1,4 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using ArkApplication.Framework.Common.Operations;
+using ArkApplication.Models;
+using ArkApplication.Framework.NoSql;
+using System;
 
 namespace ArkApplication.Controllers
 {
@@ -7,11 +11,29 @@ namespace ArkApplication.Controllers
     public class AuthController : Controller
     {
 
+        #region Filed
+
+        private readonly INoSqlRepository<users> usersRepository;
+
+        #endregion
+
+        #region Constr
+
+        public AuthController(INoSqlRepository<users> users)
+        {
+            usersRepository = users;
+        }
+
+        #endregion
+
         [Route("Login")]
         [HttpPost]
-        public bool Login()
+        public OperationResult<users> Login([FromBody] users user)
         {
-            return true;
+
+            user.name = user.email.Substring(0, user.email.IndexOf('@'));
+
+            return new OperationResult<users>(true, user);
         }
 
         [Route("Logout")]
